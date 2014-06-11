@@ -1,0 +1,34 @@
+{
+    "name": "stoempsaucisse/lightncandy-l4",
+    "type": "library",
+    "description": "A lightncandy (\"A PHP library to support almost all features of handlebars\" by zordius) wrapper for Laravel 4.",
+    "keywords": ["laravel", "laravel 4", "lightncandy", "handlebars", "php"],
+    "homepage": "https://github.com/stoempsaucisse/lightncandy-l4",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stoemp Saucisse",
+            "email": "stoempsaucisse@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "~4",
+        "zordius/lightncandy": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+            
+        ],
+        "psr-0": {
+            "Stoempsaucisse\\LightncandyL4\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php artisan config:publish stoempsaucisse/lightncandy-l4"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
