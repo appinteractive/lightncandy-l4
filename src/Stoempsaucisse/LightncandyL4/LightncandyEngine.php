@@ -3,10 +3,12 @@ namespace Stoempsaucisse\LightnCandyL4;
 
 use Illuminate\View\Engines\EngineInterface;
 use Illuminate\Filesystem\Filesystem;
-use LightnCandy;
+use LightnCandy\LightnCandy;
 use File;
 
 class LightnCandyEngine implements EngineInterface {
+
+    protected $compiledPath;
 
     public function __construct(Filesystem $files)
     {
@@ -52,7 +54,7 @@ class LightnCandyEngine implements EngineInterface {
         if( !$this->config['cache'] || $this->isExpired($path) )
         {
             $phpStr = $m->compile($view, $this->config);
-            file_put_contents($this->compiledPath, $phpStr);
+            file_put_contents($this->compiledPath, "<?php\n".$phpStr);
         }
 
         $renderer = include($this->compiledPath);
