@@ -20,7 +20,7 @@ class LightnCandyEngine implements EngineInterface {
             $this->config['template_class_prefix'] = '';
         }
     }
-    
+
     public function getCompiledPath($path)
     {
         return $this->config['cachePath'].'/'.$this->config['template_class_prefix'].md5($path);
@@ -44,6 +44,8 @@ class LightnCandyEngine implements EngineInterface {
     public function get($path, array $data = array())
     {
         $view = $this->files->get($path);
+        $viewName = str_replace($this->config['basedir'], '', $path);
+
         $m = new LightnCandy();
 
         $data = array_map(function($item){
@@ -51,12 +53,19 @@ class LightnCandyEngine implements EngineInterface {
         }, $data);
 
         $this->compiledPath = $this->getCompiledPath($path);
+
         if( !$this->config['cache'] || $this->isExpired($path) )
         {
             $phpStr = $m->compile($view, $this->config);
+            if (empty($phpStr)) {
+                throw new \Exception("Could not compile View $viewName");
+            }
             file_put_contents($this->compiledPath, "<?php\n".$phpStr);
         }
 
+        if (!file_exists($this->compiledPath) || filesize($this->compiledPath) < 15) {
+            throw new \Exception("Could not render View $viewName");
+        }
         $renderer = include($this->compiledPath);
         return $renderer($data);
     }
